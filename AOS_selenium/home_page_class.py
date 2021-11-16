@@ -105,3 +105,9 @@ class home_page:
             if w.isnumeric():
                 number_of_items += w
         return number_of_items
+    def text_in_home(self):
+        text=self.driver.find_element(By.CSS_SELECTOR,"#special_offer_items>h3")
+        return text.text
+    def click_checkout(self):
+        checkout=self.driver.find_element(By.ID,"checkOutPopUp")
+        checkout.click()

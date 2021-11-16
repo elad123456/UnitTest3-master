@@ -19,3 +19,6 @@ class category_page:
 
     def click_product(self,id):
         self.products(id).click()
+    def category_title(self):
+        text=self.driver.find_element(By.CLASS_NAME,"categoryTitle")
+        return text.text

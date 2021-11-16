@@ -13,6 +13,7 @@ from category_page_class import category_page
 from product_page_class import product_page
 from unittest import TestCase
 from shopping_cart_page_class import shopping_cart_page
+from order_payment_page_class import order_payment_page
 
 class tests_AOS(TestCase):
     def setUp(self):
@@ -26,6 +27,7 @@ class tests_AOS(TestCase):
         self.category=category_page(self.driver)
         self.product=product_page(self.driver)
         self.shopping_cart_page=shopping_cart_page(self.driver)
+        self.order_payment=order_payment_page(self.driver)
     def tearDown(self):
         sleep(10)
         self.driver.close()
@@ -148,4 +150,63 @@ class tests_AOS(TestCase):
         self.assertEqual(round(exept_price,2),total_price)
 
     def test6(self):
-        pass
+        qu = []
+        for i in range(2):
+            self.home.click_category(i)
+            if i == 0:
+                self.category.click_product("25")
+            elif i == 1:
+                self.category.click_product("16")
+            quantity = self.product.change_quantity()
+            qu.append(quantity)
+            self.product.click_add_to_cart()
+            self.product.click_back_to_home()
+        self.home.click_shopping_cart_window()
+        edits=self.shopping_cart_page.edit_buttons()
+        for i in edits:
+            sleep(7)
+            i.click()
+            self.product.change_quantity()
+            self.product.click_add_to_cart()
+    def test7(self):
+        self.home.click_category(1)
+        self.category.click_product("16")
+        self.driver.back()
+        self.assertEqual(self.category.category_title(),"TABLETS")
+        self.driver.back()
+        self.assertEqual(self.home.text_in_home(), "SPECIAL OFFER")
+    def test8(self):
+        for i in range(3):
+            self.home.click_category(i)
+            if i == 0:
+                self.category.click_product("25")
+            elif i == 1:
+                self.category.click_product("16")
+            elif i == 2:
+                self.category.click_product("9")
+            self.product.click_add_to_cart()
+            self.product.click_back_to_home()
+        self.home.click_shopping_cart_window()
+        self.home.click_checkout()
+    def test9(self):
+        for i in range(3):
+            self.home.click_category(i)
+            if i == 0:
+                self.category.click_product("25")
+            elif i == 1:
+                self.category.click_product("16")
+            elif i == 2:
+                self.category.click_product("9")
+            self.product.click_add_to_cart()
+            self.product.click_back_to_home()
+        self.home.click_shopping_cart_window()
+        self.home.click_checkout()
+        self.order_payment.enter_username("elad1234")
+        self.order_payment.enter_password("Thbyrby145")
+        self.order_payment.click_login()
+        self.order_payment.click_next()
+        self.order_payment.click_master_credit()
+        self.order_payment.click_edit()
+        self.order_payment.fill_master_card_details("123456789123","432","elad-ratner","2","4")
+        self.order_payment.click_pay_now()
+
