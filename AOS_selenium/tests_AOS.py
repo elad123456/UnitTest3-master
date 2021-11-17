@@ -163,11 +163,15 @@ class tests_AOS(TestCase):
             self.product.click_back_to_home()
         self.home.click_shopping_cart_window()
         edits=self.shopping_cart_page.edit_buttons()
+        after_change_quantities=[]
         for i in range(len(edits)):
             edits = self.shopping_cart_page.edit_buttons()
             self.shopping_cart_page.click_on_edit(edits[i])
-            self.product.change_quantity()
+            after_change_quantities.append(self.product.change_quantity())
             self.product.click_add_to_cart()
+        print(qu)
+        print(after_change_quantities)
+        self.assertListEqual(qu,after_change_quantities)
 
 
     def test7(self):
@@ -179,26 +183,45 @@ class tests_AOS(TestCase):
         self.assertEqual(self.home.text_in_home(), "SPECIAL OFFER")
     def test8(self):
         for i in range(3):
-            self.home.click_category(i)
-            if i == 0:
-                self.category.click_product("25")
-            elif i == 1:
-                self.category.click_product("16")
-            elif i == 2:
-                self.category.click_product("9")
+            self.home.click_category(8, i + 1)
+            self.category.click_product(8, i + 1)
+            self.product.enter_quantity(8, i + 1)
             self.product.click_add_to_cart()
             self.product.click_back_to_home()
         self.home.click_shopping_cart_window()
-        self.home.click_checkout()
+        self.shopping_cart_page.click_checkout()
+        self.order_payment.click_registration()
+        self.create_account.enter_username()
+        self.create_account.enter_email()
+        self.create_account.enter_password()
+        self.create_account.enter_confirm_password()
+        self.wait.until(EC.visibility_of_element_located((By.NAME, "i_agree")))
+        self.create_account.click_conditions_of_use_agreement()
+        self.wait.until(EC.element_to_be_clickable((By.ID,"register_btnundefined")))
+        self.create_account.click_register()
+        self.order_payment.click_next()
+        self.wait.until(EC.visibility_of_element_located((By.NAME, "safepay_username")))
+        self.order_payment.enter_safe_pay_username()
+        self.order_payment.enter_safe_pay_password()
+        self.order_payment.click_pay_now()
+        self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[translate='Thank_you_for_buying_with_Advantage']")))
+        self.assertTrue(self.order_payment.completed_payment().is_displayed())
+        self.home.click_shopping_cart_window()
+        self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[translate='Your_shopping_cart_is_empty']")))
+        self.sheet.add_pass_or_fail(8, self.shopping_cart_page.shopping_cart_empty().is_displayed())
+        self.assertTrue(self.shopping_cart_page.shopping_cart_empty().is_displayed())
+        tracking_number_inorder_payment=self.order_payment.tracking_number().text
+        self.home.user_emoji_click()
+        self.home.click_my_orders()
+        self.assertTrue(tracking_number_inorder_payment in self.my_orders.tracking_numbers())
+
+
+
     def test9(self):
         for i in range(3):
-            self.home.click_category(i)
-            if i == 0:
-                self.category.click_product("25")
-            elif i == 1:
-                self.category.click_product("16")
-            elif i == 2:
-                self.category.click_product("9")
+            self.home.click_category(9,i+1)
+            self.category.click_product(9,i+1)
+            self.product.enter_quantity(9,i+1)
             self.product.click_add_to_cart()
             self.product.click_back_to_home()
         self.home.click_shopping_cart_window()
@@ -209,8 +232,27 @@ class tests_AOS(TestCase):
         self.order_payment.click_next()
         self.order_payment.click_master_credit()
         self.order_payment.click_edit()
-        self.order_payment.fill_master_card_details("1234567891234","123","elad-ratner","2","4")
-        sleep(2)
-        self.order_payment.click_pay_now()
-    def test10(self):
+        self.order_payment.fill_master_card_details("123456789123","432", "elad-ratner", "2", "4")
+        self.order_payment.click_pay_now_master_card()
+        self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[translate='Thank_you_for_buying_with_Advantage']")))
+        self.assertTrue(self.order_payment.completed_payment().is_displayed())
+        tracking_number_inorder_payment = self.order_payment.tracking_number().text
+        self.home.click_shopping_cart_window()
+        self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[translate='Your_shopping_cart_is_empty']")))
+        self.sheet.add_pass_or_fail(9, self.shopping_cart_page.shopping_cart_empty().is_displayed())
+        self.assertTrue(self.shopping_cart_page.shopping_cart_empty().is_displayed())
+        self.home.user_emoji_click()
+        self.home.click_my_orders()
+        self.assertTrue(tracking_number_inorder_payment in self.my_orders.tracking_numbers())
 
+    def test10(self):
+        username='elad1234'
+        password='Thbyrby145'
+        self.home.user_emoji_click()
+        self.home.enter_username(username)
+        self.home.enter_password(password)
+        self.home.sign_in_click()
+        self.assertTrue(self.home.check_if_the_use_sign())
+        self.home.user_emoji_click()
+        self.home.click_sign_out()
+        self.assertTrue(self.home.check_if_the_use_NOT_sign())

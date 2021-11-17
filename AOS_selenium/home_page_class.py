@@ -28,16 +28,16 @@ class home_page:
     def username(self):
         return self.driver.find_element(By.NAME,"username")
 
-    def enter_username(self):
+    def enter_username(self,name):
         self.username().clear()
-        self.username().send_keys('elad1234')
+        self.username().send_keys(name)
 
     def password(self):
         return self.driver.find_element(By.NAME,"password")
 
-    def enter_password(self):
+    def enter_password(self,passw):
         self.password().clear()
-        self.password().send_keys('Thbyrby145')
+        self.password().send_keys(passw)
 
     def sign_in(self):
         return self.driver.find_element(By.ID,"sign_in_btnundefined")
@@ -51,6 +51,17 @@ class home_page:
 
     def click_sign_out(self):
         self.sign_out().click()
+
+    def check_if_the_use_sign(self):
+        self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR,"[class='hi-user containMiniTitle ng-binding']")))
+        text = self.driver.find_elements(By.CSS_SELECTOR, "[class='hi-user containMiniTitle ng-binding']")
+        if len(text) == 1:
+            return True
+    def check_if_the_use_NOT_sign(self):
+        self.wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR,"[class='hi-user containMiniTitle ng-binding']")))
+        text = self.driver.find_elements(By.CSS_SELECTOR, "[class='hi-user containMiniTitle ng-binding']")
+        if len(text) == 0:
+            return True
 
     def shopping_cart_window(self):
         return self.driver.find_element(By.ID,"menuCart")
