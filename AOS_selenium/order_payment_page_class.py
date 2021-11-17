@@ -5,6 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 import random
 from time import sleep
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.common.keys import Keys
+
 
 
 class order_payment_page:
@@ -50,10 +52,12 @@ class order_payment_page:
     def card_holder_name(self):
         return self.driver.find_element(By.NAME,"cardholder_name")
     def fill_master_card_details(self,card_number,cvv_number,holder_name,mm,yyyy):
+        self.wait.until(EC.visibility_of_element_located((By.NAME,"card_number")))
         card_num_element=self.card_number()
-        card_num_element.clear()
+        card_num_element.send_keys(Keys.DELETE)
         card_num_element.send_keys(card_number)
         CVV_element=self.CVV_number()
+        CVV_element.click()
         CVV_element.clear()
         CVV_element.send_keys(cvv_number)
         holder_element=self.card_holder_name()
@@ -61,8 +65,10 @@ class order_payment_page:
         holder_element.send_keys(holder_name)
         self.date_mounth().select_by_index(mm)
         self.date_year().select_by_index(yyyy)
+
     def click_pay_now(self):
-         pay_now=self.driver.find_element(By.NAME,"pay_now_btn_MasterCredit")
+         pay_now=self.driver.find_element(By.IDd,"pay_now_btn_MasterCredit")
+         self.wait.until(EC.visibility_of_element_located((By.NAME,"pay_now_btn_MasterCredit")))
          pay_now.click()
     def click_edit(self):
          edit=self.driver.find_element(By.CLASS_NAME,"edit")

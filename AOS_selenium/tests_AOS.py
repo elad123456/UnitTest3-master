@@ -163,11 +163,13 @@ class tests_AOS(TestCase):
             self.product.click_back_to_home()
         self.home.click_shopping_cart_window()
         edits=self.shopping_cart_page.edit_buttons()
-        for i in edits:
-            sleep(7)
-            i.click()
+        for i in range(len(edits)):
+            edits = self.shopping_cart_page.edit_buttons()
+            self.shopping_cart_page.click_on_edit(edits[i])
             self.product.change_quantity()
             self.product.click_add_to_cart()
+
+
     def test7(self):
         self.home.click_category(1)
         self.category.click_product("16")
@@ -207,6 +209,8 @@ class tests_AOS(TestCase):
         self.order_payment.click_next()
         self.order_payment.click_master_credit()
         self.order_payment.click_edit()
-        self.order_payment.fill_master_card_details("123456789123","432","elad-ratner","2","4")
+        self.order_payment.fill_master_card_details("1234567891234","123","elad-ratner","2","4")
+        sleep(2)
         self.order_payment.click_pay_now()
+    def test10(self):
 

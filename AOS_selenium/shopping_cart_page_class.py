@@ -30,6 +30,5 @@ class shopping_cart_page:
         edits=self.driver.find_elements(By.CSS_SELECTOR,"[class='edit ng-scope']")
         return edits
     def click_on_edit(self,edit):
-        # self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR,"[class='edit ng-scope']")))
+        self.wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR,"td[colspan='3']")))
         edit.click()
-
