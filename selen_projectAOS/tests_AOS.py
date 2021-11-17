@@ -23,7 +23,7 @@ from selenium.common import exceptions
 class tests_AOS(TestCase):
     def setUp(self):
         print("setUp")
-        service1 = Service(r"C:\chromedriver_win32/chromedriver")
+        service1 = Service(r"C:\Users\Admin\Documents\ELAD\chromedriver.exe")
         self.driver = webdriver.Chrome(service=service1)
         self.driver.get("https://advantageonlineshopping.com/#/")
         self.driver.maximize_window()
@@ -208,16 +208,16 @@ class tests_AOS(TestCase):
         self.shopping_cart_page.click_checkout()
         # register to site with new account
         self.order_payment.click_registration()
-        self.create_account.enter_username()
-        self.create_account.enter_email()
-        self.create_account.enter_password()
-        self.create_account.enter_confirm_password()
+        self.create_account.enter_username(8)
+        self.create_account.enter_email(8)
+        self.create_account.enter_password(8)
+        self.create_account.enter_confirm_password(8)
         self.create_account.click_conditions_of_use_agreement()
         self.create_account.click_register()
         self.order_payment.click_next()
         # connect to Safe pay account
-        self.order_payment.enter_safe_pay_username()
-        self.order_payment.enter_safe_pay_password()
+        self.order_payment.enter_safe_pay_username(8)
+        self.order_payment.enter_safe_pay_password(8)
         # pay for the products
         self.order_payment.click_pay_now()
         order_number_inorder_payment = self.order_payment.order_number().text
@@ -246,14 +246,14 @@ class tests_AOS(TestCase):
         self.home.click_shopping_cart_window()
         self.home.click_checkout()
         # login to user
-        self.order_payment.enter_username("elad1234")
-        self.order_payment.enter_password("Thbyrby145")
+        self.order_payment.enter_username(9)
+        self.order_payment.enter_password(9)
         self.order_payment.click_login()
         self.order_payment.click_next()
         # insert Master Card account details
         self.order_payment.click_master_credit()
         self.order_payment.click_edit()
-        self.order_payment.fill_master_card_details("123456789123","432", "elad-ratner", "2", "4")
+        self.order_payment.fill_master_card_details(9)
         # pay for order
         self.order_payment.click_pay_now_master_card()
         # check order is completed
@@ -271,8 +271,10 @@ class tests_AOS(TestCase):
 
     # Test 10- check login and logout processes
     def test10(self):
-        username = 'elad1234'
-        password = 'Thbyrby145'
+        username = self.sheet.get_exist_username(10)
+        password = self.sheet.get_exist_password(10)
+        print(username)
+        print(password)
         # log in to site with exist user
         self.home.user_emoji_click()
         self.home.enter_username(username)

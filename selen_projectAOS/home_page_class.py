@@ -18,6 +18,7 @@ class home_page:
         return categories_element
 
     def click_category(self,test_number,product_number):
+        self.wait.until(EC.invisibility_of_element_located((By.ID,"checkOutPopUp")))
         self.category(test_number,product_number).click()
 
     def user_emoji(self):
