@@ -133,6 +133,7 @@ class home_page:
         self.wait.until(EC.visibility_of_element_located((By.ID, "checkOutPopUp")))
         string_of_items = self.driver.find_element(By.CSS_SELECTOR, "td>span>label").text
         number_of_items = ""
+        # take just the numeric character from the element
         for w in string_of_items:
             if w.isnumeric():
                 number_of_items += w
@@ -165,6 +166,7 @@ class home_page:
     def check_if_the_user_sign(self):
         self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[class='hi-user containMiniTitle ng-binding']")))
         text = self.driver.find_elements(By.CSS_SELECTOR, "[class='hi-user containMiniTitle ng-binding']")
+        # check if the username is presented near the man icon
         if len(text) == 1:
             return True
         return False
@@ -173,6 +175,7 @@ class home_page:
     def check_if_the_user_NOT_sign(self):
         self.wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, "[class='hi-user containMiniTitle ng-binding']")))
         text = self.driver.find_elements(By.CSS_SELECTOR, "[class='hi-user containMiniTitle ng-binding']")
+        # check if the username is not presented near the man icon
         if len(text) == 0:
             return True
         return False

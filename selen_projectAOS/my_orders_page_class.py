@@ -17,9 +17,11 @@ class my_orders_page:
     def order_numbers(self):
         elements=self.driver.find_elements(By.CSS_SELECTOR, "tr[data-ng-repeat-start='order in myOrdersCtrl.orders track by $index']>td>label")
         order_numbers=[]
+        # check if the element is the order number
         for i in elements:
             if i.text.isalnum() and len(i.text)>1:
                 order_numbers.append(i.text)
+        # remove duplications
         order_numbers=set(order_numbers)
         order_numbers=list(order_numbers)
         return order_numbers

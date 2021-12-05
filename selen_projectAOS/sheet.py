@@ -20,23 +20,20 @@ class AOS_Sheet:
         products_numbers=[self.sheet["A2"].value,self.sheet["A6"].value,self.sheet["A10"].value]
         products_details={}
         # pass on the xl table and make dictionary of tests and into hit dictionary of products and their details
-        for column in self.sheet.iter_cols(1,11,1,13,True):
-             if column[0] is None or column[1] is None:
-                continue
-             else:
-                 test_number=column[0]
-                 x=1
-                 for i in products_numbers:
+        for column in self.sheet.iter_cols(3,11,1,13,True):
+             test_number=column[0]
+             x=1
+             for i in products_numbers:
 
-                    detail={
-                     "Category":column[x],
-                     "Product ID": column[x+1],
-                     "Quantity": column[x+2],
-                     "Color": column[x+3]
-                    }
-                    x+=4
-                    products_details[i]=detail
-                 tests[test_number]=products_details
+                detail={
+                 "Category":column[x],
+                 "Product ID": column[x+1],
+                 "Quantity": column[x+2],
+                 "Color": column[x+3]
+                }
+                x+=4
+                products_details[i]=detail
+             tests[test_number]=products_details
 
         # print the tests dictionary in json format
         print(json.dumps(tests,indent=4))
